@@ -1,9 +1,8 @@
-﻿using DatabaseAccess.Models;
-
+﻿
 namespace DatabaseAccess.Data
 {
     public interface IUserData
     {
-        Task InsertUser(UserModel user);
+        Task InsertUser(string firstName,string lastName);
     }
 }

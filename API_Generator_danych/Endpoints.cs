@@ -1,5 +1,4 @@
 ﻿using DatabaseAccess.Data;
-using DatabaseAccess.Models;
 using Generator;
 
 namespace API_Generator_danych;
@@ -13,13 +12,13 @@ public static class Endpoints
 
     private static async Task<IResult> InsertUser(int usersAmount, IUserData data, IPersonsGenerator generator)
     {
-        List<UserModel> users = generator.GeneratePersonsData(usersAmount);
+        List<(string,string)> users = generator.GeneratePersonsData(usersAmount);
 
         try
         {
             for (int i = 0; i < usersAmount; i++)
             {
-                await data.InsertUser(users[i]);
+                await data.InsertUser(users[i].Item1,users[i].Item2);
             }
             return Results.Ok();
         }

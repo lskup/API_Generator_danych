@@ -1,5 +1,4 @@
-﻿using DatabaseAccess.Models;
-
+﻿
 namespace Generator;
 
 public class PersonsGenerator : IPersonsGenerator
@@ -38,15 +37,15 @@ public class PersonsGenerator : IPersonsGenerator
         }
     }
 
-    public List<UserModel> GeneratePersonsData(int usersAmount)
+    public List<(string,string)> GeneratePersonsData(int usersAmount)
     {
-        List<UserModel> users = new List<UserModel>();
+        List<(string,string)> users = new List<(string,string)>();
 
         for (int i = 0; i < usersAmount; i++)
         {
             string FirstName = AvailableData[random.Next(50)];
             string LastName = AvailableData[random.Next(50, 100)];
-            users.Add(new UserModel(FirstName, LastName));
+            users.Add(new (FirstName, LastName));
         }
 
         return users;
