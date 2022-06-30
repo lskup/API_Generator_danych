@@ -1,5 +1,7 @@
 ﻿using DatabaseAccess.Data;
 using Generator;
+using Serilog;
+
 
 namespace API_Generator_danych;
 
@@ -7,20 +9,22 @@ public static class Endpoints
 {
     public static void ConfigureEndpoints(this WebApplication app)
     {
-        app.MapPost("/Users", InsertUser);
+        app.MapGet("/Users", GetUsers);
     }
 
-    private static async Task<IResult> InsertUser(int usersAmount, IUserData data, IPersonsGenerator generator)
+    private static async Task<IResult> GetUsers(int usersAmount, IUserData _userData, IPersonsGenerator _generator, ICustomerData _customerData)
     {
-        List<(string,string)> users = generator.GeneratePersonsData(usersAmount);
-
         try
         {
-            for (int i = 0; i < usersAmount; i++)
-            {
-                await data.InsertUser(users[i].Item1,users[i].Item2);
-            }
-            return Results.Ok();
+            if(usersAmount==0)
+                return Results.BadRequest("Users amount must be greater than 0");
+
+            var users = _generator.GeneratePersonsData(usersAmount);
+
+            await _customerData.InsertCustomerData();
+            await _userData.InsertManyUsers(users, usersAmount);
+
+            return Results.Ok(users);
         }
         catch (Exception ex)
         {
