@@ -24,7 +24,7 @@ public static class Endpoints
             await _customerData.InsertCustomerData();
             await _userData.InsertManyUsers(users, usersAmount);
 
-            return Results.Ok(users);
+            return Results.Ok(users.Select(x => (new { FirstName = x.Item1, LastName = x.Item2 })));
         }
         catch (Exception ex)
         {
